@@ -1,0 +1,8 @@
+{
+  "name": "nuxt-i18next",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "author": "derpierre65 <git@derpierre65.de",
+  "license": "ISC"
+}
