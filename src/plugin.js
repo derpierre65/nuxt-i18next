@@ -91,5 +91,13 @@ export default async ({ app }) => {
 		return value.toString().toUpperCase();
 	});
 
+	customFormatter.addHelper('lowercase', (value) => {
+		if (!value) {
+			return value;
+		}
+
+		return value.toString().toUpperCase();
+	});
+
 	app.i18n.formatter = customFormatter;
 }
