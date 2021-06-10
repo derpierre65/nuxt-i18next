@@ -124,7 +124,6 @@ class CustomFormatter {
 
 		this.helpers = {};
 		this.i18n = i18n;
-		this.pluralResolver = new PluralResolver(this.options.translation);
 		this.options = Object.assign({
 			translation: {
 				prepend: '',
@@ -135,6 +134,7 @@ class CustomFormatter {
 				pluralSeparator: '_',
 			},
 		}, options);
+		this.pluralResolver = new PluralResolver(this.options.translation);
 	}
 
 	interpolate(translation, params, key) {
