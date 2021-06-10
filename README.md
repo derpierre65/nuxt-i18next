@@ -3,12 +3,16 @@
 Add `nuxt-i18next` to nuxt.config.js
 ```js
 modules: [
-	// nuxt-i18next must be before nuxt-i18n
+    // nuxt-i18next must be before nuxt-i18n
     ['nuxt-i18next', {
         interpolation: {
             prefix: '{', // default {{
             suffix: '}', // default }}
-        }
+	        pluralSeparator: '-', // default _
+        },
+	    translation: {
+		    prepend: '', // prepend for pluralization strings
+	    },
     }],
     'nuxt-i18n',
 ],
