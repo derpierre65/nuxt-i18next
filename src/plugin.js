@@ -138,7 +138,7 @@ class CustomFormatter {
 	}
 
 	interpolate(translation, params, key) {
-		let pluralSuffix = typeof params.count === 'number' ? this.pluralResolver.getSuffix(this.i18n.locale, params.count) : '';
+		let pluralSuffix = params && typeof params.count === 'number' ? this.pluralResolver.getSuffix(this.i18n.locale, params.count) : '';
 		if (pluralSuffix) {
 			let pluralMessage = null;
 			let messages = this.i18n._getMessages()[this.i18n.locale];
@@ -168,7 +168,7 @@ class CustomFormatter {
 			}
 		}
 
-		let test = new RegExp(this.options.interpolation.prefix + '([a-z A-Z0-9_-.,]+)' + this.options.interpolation.suffix, 'gm');
+		let test = new RegExp(this.options.interpolation.prefix + '([a-z A-Z0-9_\\-.,]+)' + this.options.interpolation.suffix, 'gm');
 		let translated = [];
 		let translationString = translation;
 		let match;
