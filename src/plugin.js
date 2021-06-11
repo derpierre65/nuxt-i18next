@@ -138,7 +138,7 @@ class CustomFormatter {
 	}
 
 	interpolate(translation, params, key) {
-		let pluralSuffix = this.pluralResolver.getSuffix(this.i18n.locale, params.count);
+		let pluralSuffix = typeof params.count === 'number' ? this.pluralResolver.getSuffix(this.i18n.locale, params.count) : '';
 		if (pluralSuffix) {
 			let pluralMessage = null;
 			let messages = this.i18n._getMessages()[this.i18n.locale];
@@ -164,19 +164,21 @@ class CustomFormatter {
 				translation = pluralMessage;
 			}
 			else {
-				console.log('translation not found :(', key);
+				console.log('translation %s not found :(', key);
 			}
 		}
 
-		let test = new RegExp(this.options.interpolation.prefix + '([a-z A-Z-.,]+)' + this.options.interpolation.suffix, 'gm');
-		let translated = translation;
+		let test = new RegExp(this.options.interpolation.prefix + '([a-z A-Z0-9_-.,]+)' + this.options.interpolation.suffix, 'gm');
+		let translated = [];
+		let translationString = translation;
 		let match;
 		while (match = test.exec(translation)) {
-			let args = match[1].replace(/ /gm, '').split(',');
-			let variableArgs = args[0].split('.');
+			let helpers = match[1].replace(/ /gm, '').split(',');
+			let variableArgs = helpers[0].split('.');
 			let key = variableArgs[0];
 			let value = params[key] || null;
 
+			// get value for variable (example: my.nested.variable)
 			for (let key of variableArgs.slice(1)) {
 				if (!value) {
 					break;
@@ -185,18 +187,28 @@ class CustomFormatter {
 				value = value[key];
 			}
 
-			for (let helperMethod of args.slice(1)) {
+			// execute the helppers
+			for (let helperMethod of helpers.slice(1)) {
 				if (this.helpers[helperMethod]) {
 					value = this.helpers[helperMethod](value);
 				}
 			}
 
-			translated = translated.replace(match[0].toString(), value);
+			let variableKey = match[0].toString();
+			if (typeof value !== 'string' && typeof value !== 'number') {
+				let split = translationString.split(variableKey);
+				translated.push(split[0], value);
+				translationString = split.slice(1).join(variableKey);
+			}
+			else {
+				translationString = translationString.replace(variableKey, value);
+			}
 		}
+
+		translated.push(translationString);
 
 		return translated;
 	}
-
 	addHelper(name, callback) {
 		this.helpers[name] = callback;
 	}
