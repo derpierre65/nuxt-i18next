@@ -163,7 +163,7 @@ class CustomFormatter {
 			if (pluralMessage) {
 				translation = pluralMessage;
 			}
-			else {
+			else if ( key === translation ) {
 				console.log('translation %s not found :(', key);
 			}
 		}
@@ -176,7 +176,7 @@ class CustomFormatter {
 			let helpers = match[1].replace(/ /gm, '').split(',');
 			let variableArgs = helpers[0].split('.');
 			let key = variableArgs[0];
-			let value = params[key] || null;
+			let value = typeof params[key] !== 'undefined' ? params[key] :  null;
 
 			// get value for variable (example: my.nested.variable)
 			for (let key of variableArgs.slice(1)) {
